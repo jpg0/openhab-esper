@@ -1,5 +1,7 @@
 package org.openhab.automation.esper;
 
+import java.util.function.Consumer;
+
 import org.openhab.core.items.events.ItemCommandEvent;
 import org.openhab.core.items.events.ItemStateChangedEvent;
 import org.openhab.core.items.events.ItemStateEvent;
@@ -38,7 +40,7 @@ public class EsperEngine {
         return runtime;
     }
 
-    public Runnable deployEPL(String epl) {
+    public Runnable deployEPL(String epl, Consumer<Object> callback) {
         EPCompiler compiler = EPCompilerProvider.getCompiler();
         CompilerArguments args = new CompilerArguments(configuration);
 
@@ -54,6 +56,16 @@ public class EsperEngine {
             deployment = runtime.getDeploymentService().deploy(epCompiled);
         } catch (EPDeployException ex) {
             throw new IllegalStateException("Failed to deploy EPL", ex);
+        }
+
+        if (callback != null) {
+            for (EPStatement statement : deployment.getStatements()) {
+                statement.setSubscriber(new Object() {
+                    void update(Object o) {
+                        callback.accept(o);
+                    }
+                });
+            }
         }
 
         return () -> {

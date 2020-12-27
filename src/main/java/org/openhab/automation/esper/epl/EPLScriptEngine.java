@@ -9,9 +9,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.openhab.automation.esper.EsperEngine;
 
-public class EPLScriptEngine extends AbstractScriptEngine {
+public class EPLScriptEngine extends AbstractScriptEngine implements Invocable {
 
     private final EsperEngine esperEngine;
+    private Runnable unloadHook;
 
     public EPLScriptEngine(EsperEngine esperEngine) {
         super();
@@ -20,7 +21,7 @@ public class EPLScriptEngine extends AbstractScriptEngine {
 
     @Override
     public Object eval(String s, ScriptContext scriptContext) throws ScriptException {
-        esperEngine.deployEPL(s);
+        unloadHook = esperEngine.deployEPL(s, null);
         return null;
     }
 
@@ -31,6 +32,42 @@ public class EPLScriptEngine extends AbstractScriptEngine {
         } catch (IOException e) {
             throw new ScriptException(e);
         }
+    }
+
+    @Override
+    public Object invokeFunction(String s, Object... objects) throws ScriptException, NoSuchMethodException {
+
+        switch (s) {
+            case "scriptLoaded":
+                break;
+            case "scriptUnloaded":
+                unload();
+                break;
+            default:
+                throw new NotImplementedException();
+        }
+
+        return null;
+    }
+
+    private void unload() {
+        unloadHook.run();
+        unloadHook = null;
+    }
+
+    @Override
+    public Object invokeMethod(Object o, String s, Object... objects) throws ScriptException, NoSuchMethodException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public <T> T getInterface(Class<T> aClass) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public <T> T getInterface(Object o, Class<T> aClass) {
+        throw new NotImplementedException();
     }
 
     @Override
