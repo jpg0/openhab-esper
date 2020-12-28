@@ -53,7 +53,8 @@ public class EPLScriptExtensionProvider implements ScriptExtensionProvider {
     private EPLDeployer getDeployer(String scriptIdentifier) {
         return (epl, callback) -> {
             Runnable unloadHook = esperEngine.deployEPL(epl, callback);
-            List<Runnable> unloadHooks = scriptIdentifierToUnloadHooks.putIfAbsent(scriptIdentifier, new ArrayList<>());
+            scriptIdentifierToUnloadHooks.putIfAbsent(scriptIdentifier, new ArrayList<>());
+            List<Runnable> unloadHooks = scriptIdentifierToUnloadHooks.get(scriptIdentifier);
             unloadHooks.add(unloadHook);
         };
     }

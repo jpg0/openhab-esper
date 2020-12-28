@@ -79,7 +79,7 @@ public class EsperEngine {
         if (callback != null) {
             for (EPStatement statement : deployment.getStatements()) {
                 statement.setSubscriber(new Object() {
-                    void update(Object o) {
+                    public void update(Object o) {
                         callback.accept(o);
                     }
                 });
