@@ -2,11 +2,12 @@ package org.openhab.automation.esper.epl;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collections;
+import java.util.List;
 
 import javax.script.*;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.NotImplementedException;
 import org.openhab.automation.esper.EsperEngine;
 
 public class EPLScriptEngine extends AbstractScriptEngine implements Invocable {
@@ -44,7 +45,7 @@ public class EPLScriptEngine extends AbstractScriptEngine implements Invocable {
                 unload();
                 break;
             default:
-                throw new NotImplementedException();
+                throw new IllegalStateException("Not Implemented");
         }
 
         return null;
@@ -57,26 +58,86 @@ public class EPLScriptEngine extends AbstractScriptEngine implements Invocable {
 
     @Override
     public Object invokeMethod(Object o, String s, Object... objects) throws ScriptException, NoSuchMethodException {
-        throw new NotImplementedException();
+        throw new IllegalStateException("Not Implemented");
     }
 
     @Override
     public <T> T getInterface(Class<T> aClass) {
-        throw new NotImplementedException();
+        throw new IllegalStateException("Not Implemented");
     }
 
     @Override
     public <T> T getInterface(Object o, Class<T> aClass) {
-        throw new NotImplementedException();
+        throw new IllegalStateException("Not Implemented");
     }
 
     @Override
     public Bindings createBindings() {
-        throw new NotImplementedException();
+        throw new IllegalStateException("Not Implemented");
     }
 
     @Override
     public ScriptEngineFactory getFactory() {
-        throw new NotImplementedException();
+        return new ScriptEngineFactory() {
+            @Override
+            public String getEngineName() {
+                throw new IllegalStateException("Not Implemented");
+            }
+
+            @Override
+            public String getEngineVersion() {
+                throw new IllegalStateException("Not Implemented");
+            }
+
+            @Override
+            public List<String> getExtensions() {
+                throw new IllegalStateException("Not Implemented");
+            }
+
+            @Override
+            public List<String> getMimeTypes() {
+                return Collections.singletonList("application/epl");
+            }
+
+            @Override
+            public List<String> getNames() {
+                throw new IllegalStateException("Not Implemented");
+            }
+
+            @Override
+            public String getLanguageName() {
+                return "Event Processing Language";
+            }
+
+            @Override
+            public String getLanguageVersion() {
+                return "8.6.0"; // todo: pull from manifest
+            }
+
+            @Override
+            public Object getParameter(String s) {
+                throw new IllegalStateException("Not Implemented");
+            }
+
+            @Override
+            public String getMethodCallSyntax(String s, String s1, String... strings) {
+                throw new IllegalStateException("Not Implemented");
+            }
+
+            @Override
+            public String getOutputStatement(String s) {
+                throw new IllegalStateException("Not Implemented");
+            }
+
+            @Override
+            public String getProgram(String... strings) {
+                throw new IllegalStateException("Not Implemented");
+            }
+
+            @Override
+            public ScriptEngine getScriptEngine() {
+                throw new IllegalStateException("Not Implemented");
+            }
+        };
     }
 }

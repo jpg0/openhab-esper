@@ -42,7 +42,7 @@ public final class EPLScriptEngineFactory implements ScriptEngineFactory {
 
     @Override
     public List<String> getScriptTypes() {
-        return Arrays.asList("epl");
+        return Arrays.asList("epl", "application/epl");
     }
 
     @Override

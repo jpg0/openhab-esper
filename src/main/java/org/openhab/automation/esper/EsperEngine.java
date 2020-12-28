@@ -1,7 +1,11 @@
 package org.openhab.automation.esper;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.events.Event;
 import org.openhab.core.items.events.ItemCommandEvent;
 import org.openhab.core.items.events.ItemStateChangedEvent;
 import org.openhab.core.items.events.ItemStateEvent;
@@ -12,35 +16,49 @@ import org.slf4j.LoggerFactory;
 
 import com.espertech.esper.common.client.EPCompiled;
 import com.espertech.esper.common.client.configuration.Configuration;
-import com.espertech.esper.compiler.client.CompilerArguments;
-import com.espertech.esper.compiler.client.EPCompileException;
-import com.espertech.esper.compiler.client.EPCompiler;
-import com.espertech.esper.compiler.client.EPCompilerProvider;
+import com.espertech.esper.compiler.client.*;
 import com.espertech.esper.runtime.client.*;
 
-@Component
+@NonNullByDefault
+@Component(service = EsperEngine.class)
 public class EsperEngine {
-    private Logger logger = LoggerFactory.getLogger(EsperEngine.class);
+    private final Logger logger = LoggerFactory.getLogger(EsperEngine.class);
 
-    private EPRuntime runtime;
-    private Configuration configuration;
+    private final EPRuntime runtime;
+    private final Configuration configuration;
 
     @Activate
-    public EsperEngine() {
+    public EsperEngine() throws NoSuchFieldException, IllegalAccessException {
         configuration = new Configuration();
-        configuration.getCommon().addEventType(ItemStateEvent.TYPE, ItemStateEvent.class);
-        configuration.getCommon().addEventType(ItemStateChangedEvent.TYPE, ItemStateChangedEvent.class);
-        configuration.getCommon().addEventType(ItemCommandEvent.TYPE, ItemCommandEvent.class);
+
+        for (Class<? extends Event> eventClass : eventTypes()) {
+            configuration.getCommon().addEventType((String) eventClass.getField("TYPE").get(null), eventClass);
+        }
+
+        configuration.getCompiler().getByteCode().setAllowSubscriber(true);
 
         runtime = EPRuntimeProvider.getDefaultRuntime(configuration);
         logger.info("Created Esper provider");
+    }
+
+    public static Set<Class<? extends Event>> eventTypes() {
+        return Set.of(ItemStateEvent.class, ItemStateChangedEvent.class, ItemCommandEvent.class);
+    }
+
+    public void sendEvent(Event event) {
+        if (eventTypes().contains(event.getClass())) {
+            logger.trace("Sending event of type {} to Esper", event.getType());
+            getRuntime().getEventService().sendEventBean(event, event.getType());
+        } else {
+            logger.trace("Not sending event of type {} to Esper", event.getType());
+        }
     }
 
     public EPRuntime getRuntime() {
         return runtime;
     }
 
-    public Runnable deployEPL(String epl, Consumer<Object> callback) {
+    public Runnable deployEPL(String epl, @Nullable Consumer<Object> callback) {
         EPCompiler compiler = EPCompilerProvider.getCompiler();
         CompilerArguments args = new CompilerArguments(configuration);
 

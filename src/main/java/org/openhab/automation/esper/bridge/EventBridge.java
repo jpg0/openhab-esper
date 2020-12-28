@@ -12,10 +12,10 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-@Component
+@Component(service = EventSubscriber.class)
 public class EventBridge implements EventSubscriber {
 
-    private EsperEngine esperEngine;
+    private final EsperEngine esperEngine;
 
     @Activate
     public EventBridge(final @Reference EsperEngine esperEngine) {
@@ -34,6 +34,6 @@ public class EventBridge implements EventSubscriber {
 
     @Override
     public void receive(Event event) {
-        esperEngine.getRuntime().getEventService().sendEventBean(event, event.getType());
+        esperEngine.sendEvent(event);
     }
 }
