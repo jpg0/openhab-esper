@@ -20,7 +20,9 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.automation.esper.EsperEngine;
 import org.openhab.core.automation.module.script.ScriptEngineFactory;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * An implementation of {@link ScriptEngineFactory} for EPL scripts.
@@ -33,7 +35,8 @@ public final class EPLScriptEngineFactory implements ScriptEngineFactory {
 
     private EsperEngine esperEngine;
 
-    public EPLScriptEngineFactory(EsperEngine esperEngine) {
+    @Activate
+    public EPLScriptEngineFactory(final @Reference EsperEngine esperEngine) {
         this.esperEngine = esperEngine;
     }
 

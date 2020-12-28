@@ -26,7 +26,7 @@ public class EsperEngine {
     private Configuration configuration;
 
     @Activate
-    public void activate() {
+    public EsperEngine() {
         configuration = new Configuration();
         configuration.getCommon().addEventType(ItemStateEvent.TYPE, ItemStateEvent.class);
         configuration.getCommon().addEventType(ItemStateChangedEvent.TYPE, ItemStateChangedEvent.class);

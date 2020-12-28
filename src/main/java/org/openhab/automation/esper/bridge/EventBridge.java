@@ -8,14 +8,17 @@ import org.openhab.automation.esper.EsperEngine;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventFilter;
 import org.openhab.core.events.EventSubscriber;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 @Component
 public class EventBridge implements EventSubscriber {
 
     private EsperEngine esperEngine;
 
-    public EventBridge(EsperEngine esperEngine) {
+    @Activate
+    public EventBridge(final @Reference EsperEngine esperEngine) {
         this.esperEngine = esperEngine;
     }
 

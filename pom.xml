@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.openhab.addons</groupId>
-    <artifactId>org.openhab.addons.reactor</artifactId>
+    <groupId>org.openhab.addons.bundles</groupId>
+    <artifactId>org.openhab.addons.reactor.bundles</artifactId>
     <version>3.0.0</version>
-    <!-- <relativePath/> -->
+    <relativePath/>
   </parent>
 
   <groupId>org.openhab.addons.bundles</groupId>
@@ -19,13 +19,11 @@
 
   <properties>
     <bnd.importpackage>
-      !sun.misc.*,
-      !sun.reflect.*,
-      !com.sun.management.*,
-      !jdk.internal.reflect.*,
-      !jdk.vm.ci.services
+      org.slf4j,
+      !com.sun.org.apache.xerces.internal.dom
     </bnd.importpackage>
     <oh.version>${project.version}</oh.version>
+    <esper.version>8.6.0</esper.version>
   </properties>
 
   <build>
@@ -132,17 +130,17 @@
     <dependency>
       <groupId>com.espertech</groupId>
       <artifactId>esper-common</artifactId>
-      <version>8.1.0</version>
+      <version>${esper.version}</version>
     </dependency>
     <dependency>
       <groupId>com.espertech</groupId>
       <artifactId>esper-runtime</artifactId>
-      <version>8.1.0</version>
+      <version>${esper.version}</version>
     </dependency>
     <dependency>
       <groupId>com.espertech</groupId>
       <artifactId>esper-compiler</artifactId>
-      <version>8.1.0</version>
+      <version>${esper.version}</version>
     </dependency>
 
     <dependency>
