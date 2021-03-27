@@ -1,0 +1,27 @@
+{
+  "triggers":[
+    {
+      "uid":"esper.EPLExpressionTrigger",
+      "label":"when an EPL expression is matched",
+      "description":"Triggers the Rule when an EPL expression is matched",
+      "configDescriptions":[
+        {
+          "name":"expression",
+          "type":"TEXT",
+          "label":"Expression",
+          "description":"The EPL expression.",
+          "required":true
+        }
+      ],
+      "outputs":[
+        {
+          "name": "event",
+          "type": "org.openhab.core.events.Event",
+          "description": "the event of the expression",
+          "label": "Event",
+          "reference": "event"
+        }
+      ]
+    }
+  ]
+}

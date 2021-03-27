@@ -11,6 +11,7 @@ import org.openhab.core.items.events.ItemStateChangedEvent;
 import org.openhab.core.items.events.ItemStateEvent;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +39,13 @@ public class EsperEngine {
         configuration.getCompiler().getByteCode().setAllowSubscriber(true);
 
         runtime = EPRuntimeProvider.getDefaultRuntime(configuration);
-        logger.info("Created Esper provider");
+        logger.info("Created Esper runtime");
+    }
+
+    @Deactivate
+    public void dispose() {
+        runtime.destroy();
+        logger.info("Destroyed Esper runtime");
     }
 
     public static Set<Class<? extends Event>> eventTypes() {
@@ -63,10 +70,15 @@ public class EsperEngine {
         CompilerArguments args = new CompilerArguments(configuration);
 
         EPCompiled epCompiled;
+        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+
         try {
+            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
             epCompiled = compiler.compile(epl, args);
         } catch (EPCompileException ex) {
             throw new IllegalArgumentException("Failed to compile EPL", ex);
+        } finally {
+            Thread.currentThread().setContextClassLoader(currentClassLoader);
         }
 
         EPDeployment deployment;
