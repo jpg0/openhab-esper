@@ -1,10 +1,10 @@
-package org.openhab.automation.esper.bridge;
+package org.openhab.automation.esper.internal.bridge;
 
 import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.automation.esper.EsperEngine;
+import org.openhab.automation.esper.internal.EsperEngine;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventFilter;
 import org.openhab.core.events.EventSubscriber;

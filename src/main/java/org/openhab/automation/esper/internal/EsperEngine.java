@@ -1,11 +1,13 @@
-package org.openhab.automation.esper;
+package org.openhab.automation.esper.internal;
 
 import java.util.Set;
 import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.automation.esper.out.ItemCommandOut;
+import org.openhab.automation.esper.EPLDeployer;
+import org.openhab.automation.esper.internal.out.ItemCommandOut;
+import org.openhab.automation.esper.internal.out.ItemStateOut;
 import org.openhab.core.events.Event;
 import org.openhab.core.items.events.ItemCommandEvent;
 import org.openhab.core.items.events.ItemStateChangedEvent;
@@ -23,8 +25,8 @@ import com.espertech.esper.compiler.client.*;
 import com.espertech.esper.runtime.client.*;
 
 @NonNullByDefault
-@Component(service = EsperEngine.class, immediate = true)
-public class EsperEngine {
+@Component(service = { EsperEngine.class, EPLDeployer.class }, immediate = true)
+public class EsperEngine implements EPLDeployer {
     private final Logger logger = LoggerFactory.getLogger(EsperEngine.class);
 
     private final EPRuntime runtime;
@@ -59,7 +61,7 @@ public class EsperEngine {
     }
 
     public static Set<Class<?>> outEventTypes() {
-        return Set.of(ItemCommandOut.class);
+        return Set.of(ItemCommandOut.class, ItemStateOut.class);
     }
 
     public void sendEvent(Event event) {
@@ -95,7 +97,6 @@ public class EsperEngine {
 
         EPDeployment deployment;
         try {
-            // DeploymentOptions deploymentOptions = new DeploymentOptions();
             deployment = runtime.getDeploymentService().deploy(epCompiled);
         } catch (EPDeployException ex) {
             throw new IllegalStateException("Failed to deploy EPL", ex);
@@ -103,31 +104,21 @@ public class EsperEngine {
 
         if (callback != null) {
             for (EPStatement statement : deployment.getStatements()) {
-                statement.addListener(new UpdateListener() {
-                    @Override
-                    @NonNullByDefault({})
-                    public void update(EventBean[] newEvents, EventBean[] oldEvents, EPStatement epStatement,
-                            EPRuntime epRuntime) {
-                        for (EventBean bean : newEvents) {
-                            callback.accept(bean);
-                        }
+                statement.addListener((newEvents, oldEvents, epStatement, epRuntime) -> {
+                    for (EventBean bean : newEvents) {
+                        callback.accept(bean);
                     }
                 });
-                // statement.setSubscriber(new Object() {
-                // public void update(Object o) {
-                // callback.accept(o);
-                // }
-                // });
             }
         }
 
-        return new Deployment(deployment);
+        return new EsperDeployment(deployment);
     }
 
-    public class Deployment {
+    public class EsperDeployment implements EPLDeployer.Deployment {
         private EPDeployment deployment;
 
-        public Deployment(EPDeployment deployment) {
+        public EsperDeployment(EPDeployment deployment) {
             this.deployment = deployment;
         }
 

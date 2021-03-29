@@ -19,8 +19,21 @@
 
   <properties>
     <bnd.importpackage>
-      org.slf4j,
-      !com.sun.org.apache.xerces.internal.dom
+      org.apache.commons.io;resolution:=required,\
+      org.slf4j;resolution:=required,\
+      !com.sun.org.apache.xerces.internal.dom,\
+      !com.sun.org.apache.xerces.internal.impl.dv.xs,\
+      !com.sun.org.apache.xerces.internal.dom,\
+      !com.sun.org.apache.xerces.internal.xs,\
+      !de.unkrig.jdisasm,\
+      !org.antlr.v4.gui,\
+      !org.apache.tools.ant.taskdefs,\
+      !org.apache.tools.ant.taskdefs.compilers,\
+      !org.apache.tools.ant.types,\
+      !org.w3c.dom,org.w3c.dom.bootstrap,\
+      !org.w3c.dom.ls,\
+      !org.xml.sax,\
+      !sun.reflect
     </bnd.importpackage>
     <oh.version>${project.version}</oh.version>
     <esper.version>8.6.0</esper.version>
@@ -159,25 +172,11 @@
       <version>3.1.2</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.openhab.core.bom</groupId>
-      <artifactId>org.openhab.core.bom.compile</artifactId>
-      <type>pom</type>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openhab.core.bom</groupId>
-      <artifactId>org.openhab.core.bom.openhab-core</artifactId>
-      <type>pom</type>
-      <scope>provided</scope>
-    </dependency>
     <!-- <dependency> -->
-    <!-- <groupId>org.openhab.core.bom</groupId> -->
-    <!-- <artifactId>org.openhab.core.bom.test</artifactId> -->
-    <!-- <type>pom</type> -->
-    <!-- <scope>test</scope> -->
+    <!-- <groupId>commons-io</groupId> -->
+    <!-- <artifactId>commons-io</artifactId> -->
+    <!-- <version>2.2</version> -->
     <!-- </dependency> -->
-
   </dependencies>
 
   <repositories>

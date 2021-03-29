@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.automation.esper.epl;
+package org.openhab.automation.esper.internal.epl;
 
 import java.util.*;
 
@@ -18,7 +18,7 @@ import javax.script.ScriptEngine;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.automation.esper.EsperEngine;
+import org.openhab.automation.esper.internal.EsperEngine;
 import org.openhab.core.automation.module.script.ScriptEngineFactory;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;

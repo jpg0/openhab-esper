@@ -1,10 +1,11 @@
-package org.openhab.automation.esper.script;
+package org.openhab.automation.esper.internal.script;
 
 import java.util.*;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.automation.esper.EsperEngine;
+import org.openhab.automation.esper.EPLDeployer;
+import org.openhab.automation.esper.internal.EsperEngine;
 import org.openhab.core.automation.module.script.ScriptExtensionProvider;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -50,12 +51,13 @@ public class EPLScriptExtensionProvider implements ScriptExtensionProvider {
         return null;
     }
 
-    private EPLDeployer getDeployer(String scriptIdentifier) {
+    private EPLDeployer getDeployer(final String scriptIdentifier) {
         return (epl, callback) -> {
-            EsperEngine.Deployment deployment = esperEngine.deployEPL(epl, callback);
+            EPLDeployer.Deployment deployment = esperEngine.deployEPL(epl, callback);
             scriptIdentifierToUnloadHooks.putIfAbsent(scriptIdentifier, new ArrayList<>());
-            List<EsperEngine.Deployment> unloadHooks = scriptIdentifierToUnloadHooks.get(scriptIdentifier);
+            List<EPLDeployer.Deployment> unloadHooks = scriptIdentifierToUnloadHooks.get(scriptIdentifier);
             unloadHooks.add(deployment);
+            return deployment;
         };
     }
 

@@ -1,9 +1,9 @@
-package org.openhab.automation.esper.module;
+package org.openhab.automation.esper.internal.module;
 
 import java.util.Collections;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.automation.esper.EsperEngine;
+import org.openhab.automation.esper.internal.EsperEngine;
 import org.openhab.core.automation.ModuleHandlerCallback;
 import org.openhab.core.automation.Trigger;
 import org.openhab.core.automation.handler.BaseTriggerModuleHandler;

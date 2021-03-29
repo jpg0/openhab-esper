@@ -1,4 +1,4 @@
-package org.openhab.automation.esper.epl;
+package org.openhab.automation.esper.internal.epl;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -8,7 +8,7 @@ import java.util.List;
 import javax.script.*;
 
 import org.apache.commons.io.IOUtils;
-import org.openhab.automation.esper.EsperEngine;
+import org.openhab.automation.esper.internal.EsperEngine;
 
 public class EPLScriptEngine extends AbstractScriptEngine implements Invocable {
 

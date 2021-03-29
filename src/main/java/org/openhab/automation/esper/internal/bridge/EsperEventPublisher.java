@@ -1,8 +1,7 @@
-package org.openhab.automation.esper.bridge;
+package org.openhab.automation.esper.internal.bridge;
 
-import com.espertech.esper.common.internal.event.bean.core.BeanEventBean;
-import org.openhab.automation.esper.EsperEngine;
-import org.openhab.automation.esper.out.ItemOut;
+import org.openhab.automation.esper.internal.EsperEngine;
+import org.openhab.automation.esper.internal.out.ItemOut;
 import org.openhab.core.events.EventPublisher;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -10,6 +9,8 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.espertech.esper.common.internal.event.bean.core.BeanEventBean;
 
 @Component(service = EsperEventPublisher.class, immediate = true)
 public class EsperEventPublisher {
@@ -31,7 +32,7 @@ public class EsperEventPublisher {
         StringBuilder rv = new StringBuilder();
 
         for (Class<?> outEventType : EsperEngine.outEventTypes()) {
-            rv.append("select * from ").append(outEventType.getSimpleName()).append("\n");
+            rv.append("select * from ").append(outEventType.getSimpleName()).append(";");
         }
 
         return rv.toString();

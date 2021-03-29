@@ -1,4 +1,4 @@
-package org.openhab.automation.esper.out;
+package org.openhab.automation.esper.internal.out;
 
 import org.openhab.core.events.Event;
 
