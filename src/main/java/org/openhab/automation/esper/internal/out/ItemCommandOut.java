@@ -1,23 +1,23 @@
 package org.openhab.automation.esper.internal.out;
 
-import org.openhab.core.events.Event;
-import org.openhab.core.items.events.ItemEventFactory;
+import org.openhab.core.model.script.actions.BusEvent;
 import org.openhab.core.types.Command;
 
 public class ItemCommandOut extends ItemOut {
-    private final Command command;
+    private final String stringCommand;
 
     public ItemCommandOut(String itemName, Command command) {
         super(itemName);
-        this.command = command;
+        this.stringCommand = command.toFullString();
     }
 
-    public Command getCommand() {
-        return command;
+    public ItemCommandOut(String itemName, String command) {
+        super(itemName);
+        this.stringCommand = command;
     }
 
     @Override
-    public Event toInEvent() {
-        return ItemEventFactory.createCommandEvent(getItemName(), command);
+    public void sendEvent() {
+        BusEvent.sendCommand(getItemName(), stringCommand);
     }
 }

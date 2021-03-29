@@ -1,23 +1,23 @@
 package org.openhab.automation.esper.internal.out;
 
-import org.openhab.core.events.Event;
-import org.openhab.core.items.events.ItemEventFactory;
+import org.openhab.core.model.script.actions.BusEvent;
 import org.openhab.core.types.State;
 
 public class ItemStateOut extends ItemOut {
-    private State state;
+    private String stringState;
 
     public ItemStateOut(String itemName, State state) {
         super(itemName);
-        this.state = state;
+        this.stringState = state.toFullString();
     }
 
-    public State getState() {
-        return state;
+    public ItemStateOut(String itemName, String state) {
+        super(itemName);
+        this.stringState = state;
     }
 
     @Override
-    public Event toInEvent() {
-        return ItemEventFactory.createStateEvent(getItemName(), state);
+    public void sendEvent() {
+        BusEvent.postUpdate(getItemName(), stringState);
     }
 }

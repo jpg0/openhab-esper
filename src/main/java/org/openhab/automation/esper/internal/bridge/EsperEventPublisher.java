@@ -2,7 +2,6 @@ package org.openhab.automation.esper.internal.bridge;
 
 import org.openhab.automation.esper.internal.EsperEngine;
 import org.openhab.automation.esper.internal.out.ItemOut;
-import org.openhab.core.events.EventPublisher;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -18,14 +17,12 @@ public class EsperEventPublisher {
     private final Logger logger = LoggerFactory.getLogger(EsperEventPublisher.class);
 
     private final EsperEngine esperEngine;
-    private final EventPublisher eventPublisher;
 
     private EsperEngine.Deployment listenDisposer;
 
     @Activate
-    public EsperEventPublisher(@Reference EsperEngine esperEngine, @Reference EventPublisher eventPublisher) {
+    public EsperEventPublisher(@Reference EsperEngine esperEngine) {
         this.esperEngine = esperEngine;
-        this.eventPublisher = eventPublisher;
     }
 
     private String getSubscriptionExpression() {
@@ -64,6 +61,6 @@ public class EsperEventPublisher {
 
     public void onEvent(ItemOut outEvent) {
         logger.debug("Bridging " + outEvent.toString());
-        eventPublisher.post(outEvent.toInEvent());
+        outEvent.sendEvent();
     }
 }

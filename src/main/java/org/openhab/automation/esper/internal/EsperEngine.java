@@ -90,7 +90,7 @@ public class EsperEngine implements EPLDeployer {
             Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
             epCompiled = compiler.compile(epl, args);
         } catch (EPCompileException ex) {
-            throw new IllegalArgumentException("Failed to compile EPL", ex);
+            throw new IllegalArgumentException("Failed to compile EPL: " + ex.getMessage(), ex);
         } finally {
             Thread.currentThread().setContextClassLoader(currentClassLoader);
         }
@@ -99,7 +99,7 @@ public class EsperEngine implements EPLDeployer {
         try {
             deployment = runtime.getDeploymentService().deploy(epCompiled);
         } catch (EPDeployException ex) {
-            throw new IllegalStateException("Failed to deploy EPL", ex);
+            throw new IllegalStateException("Failed to deploy EPL: " + ex.getMessage(), ex);
         }
 
         if (callback != null) {

@@ -1,7 +1,5 @@
 package org.openhab.automation.esper.internal.out;
 
-import org.openhab.core.events.Event;
-
 public abstract class ItemOut {
     private final String itemName;
 
@@ -13,5 +11,5 @@ public abstract class ItemOut {
         return itemName;
     }
 
-    public abstract Event toInEvent();
+    public abstract void sendEvent();
 }

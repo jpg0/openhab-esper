@@ -13,7 +13,7 @@ import org.openhab.automation.esper.internal.EsperEngine;
 public class EPLScriptEngine extends AbstractScriptEngine implements Invocable {
 
     private final EsperEngine esperEngine;
-    private EsperEngine.Deployment unloadHook;
+    private EsperEngine.Deployment deployment;
 
     public EPLScriptEngine(EsperEngine esperEngine) {
         super();
@@ -22,7 +22,7 @@ public class EPLScriptEngine extends AbstractScriptEngine implements Invocable {
 
     @Override
     public Object eval(String s, ScriptContext scriptContext) throws ScriptException {
-        unloadHook = esperEngine.deployEPL(s, null);
+        deployment = esperEngine.deployEPL(s, null);
         return null;
     }
 
@@ -52,8 +52,10 @@ public class EPLScriptEngine extends AbstractScriptEngine implements Invocable {
     }
 
     private void unload() {
-        unloadHook.dispose();
-        unloadHook = null;
+        if (deployment != null) {
+            deployment.dispose();
+            deployment = null;
+        }
     }
 
     @Override
