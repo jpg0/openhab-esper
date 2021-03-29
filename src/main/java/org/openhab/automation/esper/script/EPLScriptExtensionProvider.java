@@ -19,7 +19,7 @@ public class EPLScriptExtensionProvider implements ScriptExtensionProvider {
 
     private final EsperEngine esperEngine;
 
-    private Map<String, List<Runnable>> scriptIdentifierToUnloadHooks = new HashMap<>();
+    private Map<String, List<EsperEngine.Deployment>> scriptIdentifierToUnloadHooks = new HashMap<>();
 
     @Activate
     public EPLScriptExtensionProvider(final @Reference EsperEngine esperEngine) {
@@ -52,10 +52,10 @@ public class EPLScriptExtensionProvider implements ScriptExtensionProvider {
 
     private EPLDeployer getDeployer(String scriptIdentifier) {
         return (epl, callback) -> {
-            Runnable unloadHook = esperEngine.deployEPL(epl, callback);
+            EsperEngine.Deployment deployment = esperEngine.deployEPL(epl, callback);
             scriptIdentifierToUnloadHooks.putIfAbsent(scriptIdentifier, new ArrayList<>());
-            List<Runnable> unloadHooks = scriptIdentifierToUnloadHooks.get(scriptIdentifier);
-            unloadHooks.add(unloadHook);
+            List<EsperEngine.Deployment> unloadHooks = scriptIdentifierToUnloadHooks.get(scriptIdentifier);
+            unloadHooks.add(deployment);
         };
     }
 
@@ -70,11 +70,11 @@ public class EPLScriptExtensionProvider implements ScriptExtensionProvider {
 
     @Override
     public void unload(String scriptIdentifier) {
-        List<Runnable> unloadHooks = scriptIdentifierToUnloadHooks.remove(scriptIdentifier);
+        List<EsperEngine.Deployment> unloadHooks = scriptIdentifierToUnloadHooks.remove(scriptIdentifier);
 
         if (unloadHooks != null) {
-            for (Runnable unloadHook : unloadHooks) {
-                unloadHook.run();
+            for (EsperEngine.Deployment unloadHook : unloadHooks) {
+                unloadHook.dispose();
             }
         }
     }

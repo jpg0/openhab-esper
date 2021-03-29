@@ -13,12 +13,12 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 @Component(service = EventSubscriber.class)
-public class EventBridge implements EventSubscriber {
+public class EsperEventSubscriber implements EventSubscriber {
 
     private final EsperEngine esperEngine;
 
     @Activate
-    public EventBridge(final @Reference EsperEngine esperEngine) {
+    public EsperEventSubscriber(final @Reference EsperEngine esperEngine) {
         this.esperEngine = esperEngine;
     }
 
