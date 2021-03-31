@@ -20,4 +20,12 @@ public class ItemStateOut extends ItemOut {
     public void sendEvent() {
         BusEvent.postUpdate(getItemName(), stringState);
     }
+
+    @Override
+    public String toString() {
+        return "ItemStateOut{" +
+                "itemName='" + getItemName() + '\'' +
+                "stringState='" + stringState + '\'' +
+                '}';
+    }
 }

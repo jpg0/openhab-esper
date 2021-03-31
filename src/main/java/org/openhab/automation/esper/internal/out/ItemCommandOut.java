@@ -20,4 +20,12 @@ public class ItemCommandOut extends ItemOut {
     public void sendEvent() {
         BusEvent.sendCommand(getItemName(), stringCommand);
     }
+
+    @Override
+    public String toString() {
+        return "ItemCommandOut{" +
+                "itemName='" + getItemName() + '\'' +
+                "stringCommand='" + stringCommand + '\'' +
+                '}';
+    }
 }
