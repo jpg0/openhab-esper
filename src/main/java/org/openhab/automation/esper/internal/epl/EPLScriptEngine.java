@@ -5,9 +5,14 @@ import java.io.Reader;
 import java.util.Collections;
 import java.util.List;
 
-import javax.script.*;
+import javax.script.AbstractScriptEngine;
+import javax.script.Bindings;
+import javax.script.Invocable;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptException;
 
-import org.apache.commons.io.IOUtils;
 import org.openhab.automation.esper.internal.EsperEngine;
 
 public class EPLScriptEngine extends AbstractScriptEngine implements Invocable {
@@ -29,10 +34,21 @@ public class EPLScriptEngine extends AbstractScriptEngine implements Invocable {
     @Override
     public Object eval(Reader reader, ScriptContext scriptContext) throws ScriptException {
         try {
-            return eval(IOUtils.toString(reader), scriptContext);
+            return eval(readAll(reader), scriptContext);
         } catch (IOException e) {
             throw new ScriptException(e);
         }
+    }
+
+    private static String readAll(Reader reader) throws IOException {
+        char[] arr = new char[8 * 1024];
+        StringBuilder buffer = new StringBuilder();
+        int numCharsRead;
+        while ((numCharsRead = reader.read(arr, 0, arr.length)) != -1) {
+            buffer.append(arr, 0, numCharsRead);
+        }
+        reader.close();
+        return buffer.toString();
     }
 
     @Override

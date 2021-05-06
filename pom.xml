@@ -19,7 +19,6 @@
 
   <properties>
     <bnd.importpackage>
-      org.apache.commons.io;resolution:=required,\
       org.slf4j;resolution:=required,\
       !com.sun.org.apache.xerces.internal.dom,\
       !com.sun.org.apache.xerces.internal.impl.dv.xs,\

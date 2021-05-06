@@ -23,9 +23,6 @@ public class ItemStateOut extends ItemOut {
 
     @Override
     public String toString() {
-        return "ItemStateOut{" +
-                "itemName='" + getItemName() + '\'' +
-                "stringState='" + stringState + '\'' +
-                '}';
+        return "ItemStateOut{" + "itemName='" + getItemName() + '\'' + "stringState='" + stringState + '\'' + '}';
     }
 }

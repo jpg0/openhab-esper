@@ -23,9 +23,6 @@ public class ItemCommandOut extends ItemOut {
 
     @Override
     public String toString() {
-        return "ItemCommandOut{" +
-                "itemName='" + getItemName() + '\'' +
-                "stringCommand='" + stringCommand + '\'' +
-                '}';
+        return "ItemCommandOut{" + "itemName='" + getItemName() + '\'' + "stringCommand='" + stringCommand + '\'' + '}';
     }
 }

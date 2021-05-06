@@ -39,12 +39,16 @@ public class EsperEventPublisher {
     public void startListening() {
         String exp = getSubscriptionExpression();
         logger.debug("Subscribing to Esper streams to bridge onto OH streams with " + exp);
-        listenDisposer = esperEngine.deployEPL(exp, out -> onEvent(coerceToItemOut(out)));
+        listenDisposer = esperEngine.deployEPL(exp, this::onEvent);
     }
 
     @Deactivate
     public void stopListening() {
         listenDisposer.dispose();
+    }
+
+    private void onEvent(Object event) {
+        onOutEvent(coerceToItemOut(event));
     }
 
     private ItemOut coerceToItemOut(Object o) {
@@ -59,7 +63,7 @@ public class EsperEventPublisher {
         throw new IllegalArgumentException("Cannot coerce " + o.getClass().getName() + " to ItemOut");
     }
 
-    public void onEvent(ItemOut outEvent) {
+    public void onOutEvent(ItemOut outEvent) {
         logger.debug("Bridging " + outEvent.toString());
         outEvent.sendEvent();
     }
